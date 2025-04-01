@@ -1,0 +1,23 @@
+npm uninstall -g @angular/cli  # Uninstall old version
+npm install -g @angular/cli@latest  # Install latest
+ng new whatsapp-clone-front --style=scss --standalone (?NO)
+cd into the directory
+ng add @ng-bootstrap/ng-bootstrap (?YES)
+create app/assets/scss directory and file: _bootstrap-variables.scss
+run npm install
+clear app.component.html write some random html
+ng serve
+change in styles.scc from @import to @use ... as (name) and add name prefix to the classes
+ng add @fortawesome/angular-fontawesome (Y) Font Awesome 6 and choose all FREE icons
+create app/shared folder and create font-awesome-icons.ts
+run npm install
+in angular.json change projects.[name].prefix  from app to wac
+create proxy.conf.json in root folder and add it in angular.json
+under  projects.[name].architect.server as
+"options": {
+  "proxyConfig": "proxy.conf.json"
+}
+
+and fix selector in the app.component and index.html to wac instead of app
+
+

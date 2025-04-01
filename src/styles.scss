@@ -1,1 +1,140 @@
-/* You can add global styles to this file, and also import other style files */
+@use './assets/scss/_bootstrap-variables' as vars;
+@use 'bootstrap/scss/bootstrap' as *;
+//@import '@ctrl/ngx-emoji-mart/picker';
+
+fa-icon {
+  color: vars.$icon-color;
+}
+
+.btn-menu-fs {
+  font-size: 20px;
+}
+
+.btn-menu {
+  cursor: pointer;
+  width: 45px;
+  height: 45px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-menu-active {
+  background-color: vars.$btn-menu-active-color;
+  border-radius: 25px;
+  border-color: vars.$btn-menu-active-color;
+}
+
+.offcanvas {
+  margin-top: vars.$main-margin;
+  margin-bottom: vars.$main-margin;
+  left: vars.$main-margin !important;
+  width: 27.5vw !important;
+  height: calc(100% - (#{vars.$main-margin} * 2));  // Proper interpolation
+
+  > :first-child {
+    height: 100%;
+  }
+
+  #content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    #header {
+      .title {
+        color: vars.$offcanvas-title-color;
+        font-size: 19px;
+      }
+
+      fa-icon {
+        color: vars.$offcanvas-title-color;
+        font-size: 19px;
+      }
+    }
+
+    #main {
+      flex: 1;
+    }
+  }
+}
+
+.avatar-unknown {
+  border-radius: 40px;
+  font-size: 22px;
+  display: block;
+  width: 45px;
+  height: 45px;
+  padding-top: 4px;
+  text-align: center;
+  vertical-align: center;
+  background-color: vars.$white;
+  color: vars.$bg-conversation-color;
+}
+
+#user-container, .conversation-container {
+  :hover {
+    background-color: vars.$menu-bg-color;
+    cursor: pointer;
+  }
+
+  .user {
+    .avatar-unknown {
+      border-radius: 50px;
+      font-size: 30px;
+      display: block;
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      vertical-align: center;
+      background-color: #6A7176;
+      color: #CFD4D7;
+    }
+  }
+
+  .separator {
+    border-top: 1px solid vars.$menu-bg-color;
+    margin-left: 90px;
+  }
+}
+
+.subtitle {
+  color: vars.$secondary;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emoji-mart-dark {
+  border-color: vars.$menu-bg-color !important;
+  background-color: vars.$menu-bg-color !important;
+  border-radius: 16px !important;
+
+  .emoji-mart-category-label span {
+    color: vars.$secondary !important;
+    background-color: vars.$menu-bg-color !important;
+    font-family: vars.$font-family-base !important;
+    font-weight: 400 !important;
+  }
+
+  .emoji-mart-search {
+    input {
+      background-color: vars.$input-bg !important;
+      border-color: vars.$input-bg !important;
+      color: vars.$input-color !important;
+    }
+
+    input::placeholder {
+      color: vars.$send-color !important;
+    }
+  }
+
+  .emoji-mart-anchor-selected {
+    color: vars.$primary !important;
+
+    span {
+      background-color: vars.$primary !important;
+    }
+  }
+}
