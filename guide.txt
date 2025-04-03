@@ -20,4 +20,16 @@ under  projects.[name].architect.server as
 
 and fix selector in the app.component and index.html to wac instead of app
 
+npm i dayjs
+npm i keycloak-js
+npm i ngxtension
+ng g s auth/oauth2-auth
+ng g environments
+ng g c auth/auth-modal
 
+in angular.json -> "assets": [
+                     "src/favicon.ico",
+                     "src/assets"
+                   ]
+
+ng g c layout/navbar
