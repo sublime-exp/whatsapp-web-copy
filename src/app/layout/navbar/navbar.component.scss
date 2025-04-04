@@ -1,0 +1,14 @@
+@use "../../../assets/scss/bootstrap-variables" as *;
+
+.dropdown-toggle::after {
+  content: none;
+}
+
+.wac-navbar {
+  background-color: $menu-bg-color;
+  height: $header-height;
+}
+
+#add {
+  cursor: pointer;
+}
