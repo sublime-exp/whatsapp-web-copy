@@ -43,3 +43,8 @@ ng g c conversations/conversations
 move content from conversations component to the conversations parent folder
 create model dir in conversations dir move the models there
 ng g c messages/sendStateDisplay
+ng g s messages/sse
+
+npm i @types/event-source-polyfill
+npm install event-source-polyfill
+npm install --save-dev @types/event-source-polyfill

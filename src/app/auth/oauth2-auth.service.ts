@@ -8,26 +8,28 @@ import {State} from '../shared/model/state.model';
 import {catchError, from, interval, Observable, of, shareReplay, switchMap} from 'rxjs';
 import {fromPromise} from 'rxjs/internal/observable/innerFrom';
 import {AuthModalComponent} from './auth-modal/auth-modal.component';
+import {SseService} from '../messages/sse.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Oauth2AuthService {
 
-  http = inject(HttpClient)
-  modalService = inject(NgbModal)
-  notConnected = "NOT_CONNECTED"
-  accessToken: string | undefined
-  private authModalRef: NgbModalRef | undefined
+  http = inject(HttpClient);
+  modalService = inject(NgbModal);
+  sseService = inject(SseService);
+  notConnected = "NOT_CONNECTED";
+  accessToken: string | undefined;
+  private authModalRef: NgbModalRef | undefined;
   private keycloak = new Keycloak({
     url: environment.keycloak.url,
     realm: environment.keycloak.realm,
     clientId: environment.keycloak.clientId,
-  })
+  });
 
-  private MIN_TOKEN_VALIDITY_MILLISECONDS = 10000
+  private MIN_TOKEN_VALIDITY_MILLISECONDS = 10000;
 
-  private fetchUserHttp$ = new Observable<ConnectedUser>()
+  private fetchUserHttp$ = new Observable<ConnectedUser>();
 
   constructor() {
     this.initFetchUserCaching(false);
@@ -50,6 +52,7 @@ export class Oauth2AuthService {
           if (this.authModalRef) {
             this.authModalRef.close();
           }
+          this.sseService.subscribe(this.accessToken!);
         } else {
           this.authModalRef = this.modalService
             .open(AuthModalComponent, {centered: true, backdrop: "static"})

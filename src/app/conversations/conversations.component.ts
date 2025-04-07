@@ -6,6 +6,7 @@ import {Conversation, ConversationToCreate} from './model/conversation.model';
 import {Subscription} from 'rxjs';
 import {ConnectedUser} from '../shared/model/user.model';
 import {ConversationComponent} from './conversation/conversation.component';
+import {SseService} from '../messages/sse.service';
 
 @Component({
   selector: 'wac-conversations',
@@ -21,6 +22,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   conversationService = inject(ConversationService);
   toastService = inject(ToastService);
   oauth2Service = inject(Oauth2AuthService);
+  sseService = inject(SseService);
   conversations = new Array<Conversation>();
   selectedConversation: Conversation | undefined;
 
@@ -28,6 +30,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   private createSub: Subscription | undefined;
   private getAllSub: Subscription | undefined;
   private getOneBuPublicIdSub: Subscription | undefined;
+  private deleteSSESub: Subscription | undefined;
 
   connectedUser: ConnectedUser | undefined;
 
@@ -56,6 +59,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     this.listenToGetOneByPublicId();
     this.listenToConversationCreated();
     this.listenToNavigateToConversation();
+    this.listenToSSEDeleteConversation();
   }
 
   ngOnDestroy(): void {
@@ -73,6 +77,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
     if (this.getOneBuPublicIdSub) {
       this.getOneBuPublicIdSub.unsubscribe();
+    }
+
+    if (this.deleteSSESub) {
+      this.deleteSSESub.unsubscribe();
     }
 
   }
@@ -131,6 +139,14 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       })
   }
 
+  private listenToSSEDeleteConversation(): void {
+    this.deleteSSESub = this.sseService.deleteConversation.subscribe(uuidDeleted => {
+      const indexToDelete = this.conversations.findIndex(conversation => conversation.publicId === uuidDeleted);
+      this.conversations.splice(indexToDelete, 1);
+      this.toastService.show("Conversation deleted by the user", "SUCCESS")
+    })
+  }
+
   onDeleteConversation(conversation: Conversation): void {
     this.conversationService.handleDelete(conversation.publicId);
   }
@@ -144,4 +160,5 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     this.selectedConversation.active = true;
     this.conversationService.navigateToNewConversation(conversation);
   }
+
 }
