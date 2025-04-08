@@ -1,0 +1,11 @@
+@use "../../../assets/scss/bootstrap-variables" as *;
+
+.dropdown-toggle::after {
+  content: none;
+}
+
+.wac-header {
+  background-color: $menu-bg-color;
+  height: $header-height;
+  border-left: 1px solid $layout-border-color;
+}
