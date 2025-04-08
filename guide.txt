@@ -48,3 +48,10 @@ ng g s messages/sse
 npm i @types/event-source-polyfill
 npm install event-source-polyfill
 npm install --save-dev @types/event-source-polyfill
+ng g c layout/header
+ng g s messages/service/message
+ng g c messages/send
+ng g c messages/send/media
+npm i @ctrl/ngx-emoji-mart
+npm i ngxtension
+ng g c messages/messages

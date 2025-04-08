@@ -8,7 +8,7 @@ import {
   NgbAccordionItem, NgbToast
 } from '@ng-bootstrap/ng-bootstrap';
 import {RouterOutlet} from '@angular/router';
-import {FaIconComponent, FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {FaIconComponent, FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {fontAwesomeIcons} from './shared/font-awesome-icons';
 import {Oauth2AuthService} from './auth/oauth2-auth.service';
 import {NavbarComponent} from './layout/navbar/navbar.component';
@@ -16,6 +16,9 @@ import {ToastService} from './shared/toast/toast.service';
 import dayjs from 'dayjs';
 import  relativeTime from  'dayjs/plugin/relativeTime'
 import {ConversationsComponent} from './conversations/conversations.component';
+import {HeaderComponent} from './layout/header/header.component';
+import {SendComponent} from './messages/send/send.component';
+import {MessagesComponent} from './messages/messages.component';
 
 @Component({
   selector: 'wac-root',
@@ -32,7 +35,10 @@ import {ConversationsComponent} from './conversations/conversations.component';
     FaIconComponent,
     NavbarComponent,
     NgbToast,
-    ConversationsComponent
+    ConversationsComponent,
+    HeaderComponent,
+    SendComponent,
+    MessagesComponent
   ],
   styleUrl: './app.component.scss'
 })

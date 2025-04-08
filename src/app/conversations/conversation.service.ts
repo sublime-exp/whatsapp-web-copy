@@ -8,6 +8,7 @@ import {BaseUser, ConnectedUser} from '../shared/model/user.model';
 import {createPaginationOption, Pagination} from '../shared/model/request.model';
 import {environment} from '../../environments/environment';
 import dayjs from 'dayjs';
+import {MessageMarkAsViewedResponse} from './model/message.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,9 @@ export class ConversationService {
 
   private getOneByPublicId$ = new Subject<State<Conversation>>();
   getOneByPublicId = this.getOneByPublicId$.asObservable();
+
+  private markAsViewed$ = new Subject<State<MessageMarkAsViewedResponse>>();
+  markAsViewed = this.markAsViewed$.asObservable();
 
   private connectedUser: ConnectedUser | undefined;
 
@@ -71,9 +75,13 @@ export class ConversationService {
     if (conversation.messages) {
       conversation.messages.forEach(message => message.sendDate = dayjs(message.sendDate))
     }
+
+    conversation.members.forEach((member: BaseUser) => {
+      member.lastSeen = dayjs(member.lastSeen);
+    })
   }
 
-  private sortConversationByLastMessage(conversations: Array<Conversation>): void {
+  sortConversationByLastMessage(conversations: Array<Conversation>): void {
     conversations
       .sort((conversationA, conversationB) => {
         if (conversationA.messages && conversationB.messages
@@ -134,5 +142,20 @@ export class ConversationService {
   getReceiverMember(conversation: Conversation): BaseUser | undefined {
     return conversation.members
       .find(member => member.publicId !== this.connectedUser?.publicId)
+  }
+
+  handleMarkAsRead(conversationId: string): void {
+    const params = new HttpParams().set("conversationId", conversationId);
+    this.http.post<number>(`${environment.API_URL}/conversations/mark-as-read`, {}, {params})
+      .subscribe({
+        next: nbUpdatedMessages => {
+          const messagesMarkAsReadResult: MessageMarkAsViewedResponse = {
+            conversationPublicId: conversationId,
+            nbMessagesUpdated: nbUpdatedMessages
+          }
+          this.markAsViewed$.next(State.Builder<MessageMarkAsViewedResponse>().forSuccess(messagesMarkAsReadResult))
+        },
+        error: err => this.markAsViewed$.next(State.Builder<MessageMarkAsViewedResponse>().forError(err))
+      });
   }
 }

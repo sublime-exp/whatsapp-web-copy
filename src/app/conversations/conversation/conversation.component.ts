@@ -24,18 +24,20 @@ import {SendStateDisplayComponent} from '../../messages/send-state-display/send-
 })
 export class ConversationComponent {
 
+
   conversation = input.required<Conversation>();
   connectedUser = input.required<BaseUser>();
+
   conversationService = inject(ConversationService);
 
   @Output() select = new EventEmitter<Conversation>();
   @Output() delete = new EventEmitter<Conversation>();
 
   protected showMenu = false;
-  nbOfUnreadMessages = 0;
+  nbOfUnReadMessage = 0;
   contact: BaseUser | undefined;
 
-  showConversation(): void {
+  showConversation() {
     this.select.emit(this.conversation());
   }
 
@@ -43,7 +45,7 @@ export class ConversationComponent {
     this.getReceiverMember();
   }
 
-  private getReceiverMember(): void {
+  private getReceiverMember() {
     effect(() => {
       this.contact = this.conversationService.getReceiverMember(this.conversation())
     });
@@ -57,7 +59,7 @@ export class ConversationComponent {
     }
   }
 
-  computeTime(): string {
+  computeTime() {
     const lastMessage = this.getLastMessage();
     if (lastMessage) {
       return dayjs(lastMessage.sendDate).fromNow();
@@ -66,15 +68,15 @@ export class ConversationComponent {
     }
   }
 
-  hasUnreadMessages(): boolean {
+  hasUnreadMessage(): boolean {
     if (this.conversation().messages) {
-      let unreadMessages = this.conversation().messages
-        .filter(m => m.state === "RECEIVED" && m.senderId !== this.connectedUser().publicId)
+      const unreadMessages = this.conversation().messages.filter(message => message.state === "RECEIVED"
+        && message.senderId !== this.connectedUser().publicId);
       if (unreadMessages.length > 0) {
-        this.nbOfUnreadMessages = unreadMessages.length
-        return true
+        this.nbOfUnReadMessage = unreadMessages.length;
+        return true;
       } else {
-        return false
+        return false;
       }
     } else {
       return false;
@@ -82,23 +84,22 @@ export class ConversationComponent {
   }
 
   getLastMessage(): Message | null {
-    if (this.conversation().messages
-      && this.conversation().messages.length > 0) {
-      return this.conversation().messages[this.conversation().messages.length - 1]
+    if (this.conversation().messages && this.conversation().messages.length > 0) {
+      return this.conversation().messages[this.conversation().messages.length - 1];
     } else {
       return null;
     }
   }
 
-  onDelete(){
+  onDelete() {
     this.delete.emit(this.conversation());
   }
 
-  onMouseOver(){
+  onMouseOver() {
     this.showMenu = true;
   }
 
-  onMouseLeave(){
+  onMouseLeave() {
     this.showMenu = false;
   }
 }
